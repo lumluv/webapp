@@ -5,12 +5,18 @@ import { environment } from './environments/environment';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
 import { provideHttpClient } from '@angular/common/http';
+import 'zone.js';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { getAuth, provideAuth } from '@angular/fire/auth';
 if (environment.production) {
   enableProdMode();
 }
-import 'zone.js';
-bootstrapApplication(AppComponent, appConfig).then(() => {
+bootstrapApplication(AppComponent, {
   providers: [
-    provideHttpClient() // ← Thêm dòng này
-  ]
+    provideHttpClient(),
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirestore(() => getFirestore()),
+    provideAuth(() => getAuth()),
+  ],
 }).catch(err => console.error(err));
